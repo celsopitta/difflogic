@@ -49,7 +49,7 @@ class CompiledLogicNet(torch.nn.Module):
             cpu_compiler='gcc',
             verbose=False,
     ):
-        super(CompiledLogicNet, self).__init__()
+        super().__init__()
         self.model = model
         self.device = device
         self.num_bits = num_bits

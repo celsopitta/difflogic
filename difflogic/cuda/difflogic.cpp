@@ -2,7 +2,6 @@
 #include <torch/extension.h>
 #include <vector>
 
-
 namespace py = pybind11;
 
 torch::Tensor logic_layer_cuda_forward(

@@ -24,9 +24,7 @@ BITS_TO_NP_DTYPE = {8: np.int8, 16: np.int16, 32: np.int32, 64: np.int64}
 # | 15 | 1                    | 1     | 1     | 1     | 1     |
 
 def bin_op(a, b, i):
-    assert a[0].shape == b[0].shape, (a[0].shape, b[0].shape)
-    if a.shape[0] > 1:
-        assert a[1].shape == b[1].shape, (a[1].shape, b[1].shape)
+    assert a.shape == b.shape, (a.shape, b.shape)
 
     if i == 0:
         return torch.zeros_like(a)

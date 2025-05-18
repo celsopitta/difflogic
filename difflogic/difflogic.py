@@ -5,9 +5,6 @@ from .functional import bin_op_s, get_unique_connections, GradFactor
 from .packbitstensor import PackBitsTensor
 
 
-########################################################################################################################
-
-
 class LogicLayer(torch.nn.Module):
     """
     The core module for differentiable logic gate networks. Provides a differentiable logic gate layer.
@@ -21,16 +18,8 @@ class LogicLayer(torch.nn.Module):
             implementation: str = None,
             connections: str = 'random',
     ):
-        """
-        :param in_dim:      input dimensionality of the layer
-        :param out_dim:     output dimensionality of the layer
-        :param device:      device (options: 'cuda' / 'cpu')
-        :param grad_factor: for deep models (>6 layers), the grad_factor should be increased (e.g., 2) to avoid vanishing gradients
-        :param implementation: implementation to use (options: 'cuda' / 'python'). cuda is around 100x faster than python
-        :param connections: method for initializing the connectivity of the logic gate net
-        """
         super().__init__()
-        self.weights = torch.nn.parameter.Parameter(torch.randn(out_dim, 16, device=device))
+        self.weights = torch.nn.Parameter(torch.randn(out_dim, 16, device=device))
         self.in_dim = in_dim
         self.out_dim = out_dim
         self.device = device
@@ -169,20 +158,11 @@ class LogicLayer(torch.nn.Module):
             raise ValueError(connections)
 
 
-########################################################################################################################
-
-
 class GroupSum(torch.nn.Module):
     """
     The GroupSum module.
     """
     def __init__(self, k: int, tau: float = 1., device='cuda'):
-        """
-
-        :param k: number of intended real valued outputs, e.g., number of classes
-        :param tau: the (softmax) temperature tau. The summed outputs are divided by tau.
-        :param device:
-        """
         super().__init__()
         self.k = k
         self.tau = tau
@@ -197,9 +177,6 @@ class GroupSum(torch.nn.Module):
 
     def extra_repr(self):
         return 'k={}, tau={}'.format(self.k, self.tau)
-
-
-########################################################################################################################
 
 
 class LogicLayerCudaFunction(torch.autograd.Function):
@@ -219,6 +196,3 @@ class LogicLayerCudaFunction(torch.autograd.Function):
         if ctx.needs_input_grad[3]:
             grad_w = difflogic_cuda.backward_w(x, a, b, grad_y)
         return grad_x, None, None, grad_w, None, None, None
-
-
-########################################################################################################################
